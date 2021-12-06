@@ -1,0 +1,11 @@
+Be_Born
+Cohabit
+Derailment
+Domestic_Violence
+Gamble
+Marry
+Other
+Prosecute
+Raise
+Separation
+Support

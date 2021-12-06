@@ -1,0 +1,145 @@
+1、尝试了bert、roberta、ernie和nezha预训练模型的权重
+2、尝试了BCE和MLCEloss
+3、尝试了r_drop和非r_drop
+4、尝试了不同的融合策略(vote 和 logit)
+5、尝试了Labeled and Unlabeled——
+6、K-fold
+7、不同的max_sequence_length
+
+目前暂列第一0.9670——rdrop 5折融合 半监督
+
+后续可以尝试的方案
+1、FGM对抗训练
+2、Label confusion model
+3、不同的其他的预训练模型的权重
+4、尝试不同预训练模型的模型融合策略
+5、精调训练参数
+6、数据增强
+
+重新来做：
+1、v0_submition_MLCE_L512_rdrop4_logits_integrate.json——0.95749170938
+2、v1_submition_MLCE_L512_rdrop0_logits_integrate.json——0.94833185710
+3、v2_submition_MLCE_L512_rdrop2_logits_integrate.json——0.94275700935
+4、v2_submition_MLCE_L512_rdrop2_vote_integrate.json——0.95243757432
+5、v3_submition_MLCE_L512_rdrop0_logits_integrate.json——0.92826274849
+6、v3_submition_MLCE_L512_rdrop0_vote_integrate.json——0.95147365287
+7、v3_submition_MLCE_L512_rdrop0_logits_integrate_max3.json——0.94855115316
+8、v3_submition_MLCE_L512_rdrop0_vote_integrate_max3.json——0.94814378315
+模型训练的时候采用准确率验验证更好！——不要用micro_f1
+0、v0_submition_MLCE_L512_rdrop_0_RRL_scheduler_vote_integrate_max_all_20211114.json——0.96883509834、第一名最佳
+1、v0_submition_MLCE_L512_rdrop_0_RRL_scheduler_logits_integrate_max_all_20211114.json——0.96514423077——低很多
+2、v0_submition_MLCE_L512_rdrop_0_RRL_scheduler_vote_integrate_max3_20211114.json——0.96628537026——低一点点
+3、v0_submition_MLCE_L512_rdrop_0_RRL_scheduler_logits_integrate_max3_20211114.json——0.96739130——低一点点
+4、v1_submition_MLCE_L512_rdrop_0_linear_dropouts_RRL_scheduler_logits_integrate_max_5_20211115.json——0.96508127635——linear_dropouts无效
+5、v1_submition_MLCE_L512_rdrop_0_linear_dropouts_RRL_scheduler_vote_integrate_max_5_20211115.json——0.96668685645——linear_dropouts无效
+6、v2_submition_MLCE_L512_rdrop_4_RRL_scheduler_vote_integrate_max_5_20211115.json——0.96840826245、第二名rdrop-4无效
+7、v2_submition_MLCE_L512_rdrop_4_RRL_scheduler_logits_integrate_max_5_20211115.json——0.96566265060、logits比vote差
+8、v3_submition_MLCE_L512_rdrop_2_RRL_scheduler_vote_integrate_max_5_20211115.json——0.96783980583
+9、v3_submition_MLCEL512_rdrop_2_RRL_scheduler_logits_integrate_max_5_20211115.json——0.96452194829
+6789来看可以增大alpha的参数来提高性能
+10、v4_submition_MLCE_L512_rdrop_8_RRL_scheduler_vote_integrate_max_5_20211115.json——0.96785930867提升一点 还是r_drop = 0最佳
+11、v4_submition_MLCE_L512_rdrop_8_RRL_scheduler_vote_integrate_max_3_20211115.json——0.96443640
+12、v4_submition_MLCEL512_rdrop_8_RRL_scheduler_logits_integrate_max_3_20211115.json——0.96466324
+13、v4_submition_MLCEL512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_5_20211115.json——0.96566
+14、v4_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_5_20211115.json——0.96964177292——第一名
+15、v5_submition_MLCEL512_rdrop_0_RRL_scheduler_PGD_logits_integrate_max_5_20211115.json——0.96597410419
+16、v5_submition_MLCEL512_rdrop_0_RRL_scheduler_PGD_vote_integrate_max_5_20211115.json——0.96962332928——第二名
+17、v6_submition_BCE_L512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_5_20211116.json——0.96327513546
+18、v6_submition_BCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_5_20211116.json——0.96750683268
+15-18来看BCE效果不好、FGM对抗训练更好，vote策略更好
+
+
+半监督训练
+19、v7_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_0_FGM_logits_integrate_max_5_20211116.json——0.96821071753
+20、v7_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_0_FGM_vote_integrate_max_5_20211116.json——0.97019464720——第一名最高，加入prediact_result_BCE_0.csv概率大于0.9的样本
+21、v8_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1FGM_logits_integrate_max_5_20211116.json——0.97017650639——第二名，加入prediact_result_MLCE_vote_2.csv概率大于0.8的样本
+22、v8_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1FGM_vote_integrate_max_5_20211116.json——0.97074954296——第一名最高，加入prediact_result_MLCE_vote_2.csv概率大于0.8的样本
+
+
+7折验证
+23、v9_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_5_20211122.json——0.96282973621 < 0.96566       v4_submition_MLCEL512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_5_20211115.json
+24、v9_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_5_20211122.json——0.96701966717  <  0.96964177292 v4_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_5_20211115.json
+25、v9_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_7_20211122.json——0.96456456456 < 0.96566       v4_submition_MLCEL512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_5_20211115.json
+26、v9_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_7_20211122.json——0.96768347931  <  0.96964177292 v4_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_5_20211115.json
+7折无效
+
+3折验证
+27、v10_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_logits_integrate_max_3_20211123.json——0.96047904192  < 0.96566
+28、v10_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_max_3_20211123.json——0.96107784431    <  0.96964177292
+3折无效
+
+ema验证decay=0.999
+29、v11_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_5_20211123.json 0.97174111212 > 0.96964177292 提升明显
+30、v11_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_3_20211123.json 0.96649562330 <  0.96964177292 未提升
+vote = 0.6
+ema 有效
+31、v11_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.8_max_5_20211123.json 0.97055215 < 0.97174111212
+vote 0.8 效果没有 0.6好
+
+以上bs = 8 ; max_len = 512
+
+
+序列长度验证
+数据处理——训练集中把长于600的数据直接丢弃 max_len = 384
+32、v12_submition_MLCE_L384_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_5_20211123.json 0.96489104116 < 0.97174111212
+无效 下降蛮多
+
+
+预训练验证
+33、v13_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_5_pretrained_20211123.json 0.96883509834  < 0.97174111212
+下降蛮多，无效，也有可能是预训练出了问题没有预训练好
+
+
+dropout验证
+34、v14_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_5_dropout_20211123.json  0.97028502122 < 0.97174111212
+可能是dropout和FGM对抗训练冲突了
+
+
+roberta
+35、v15_roberta_submition_MLCE_L512_rdrop_0_RRL_scheduler_FGM_vote_integrate_vote_alpha_0.6_max_5_20211123.json 0.97014015844 < 0.97174111212
+看情况拿来融合
+
+
+
+半监督验证
+把20211124_prediact_result_MLCE_vote_0.csv > 0.9的样本加入训练集中  模型bert
+36、v16_bert_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_FGM_vote_integrate_vote_alpha_0.6_max_5_20211124.json 0.97289064880 > 0.97174111212 第一名
+
+把20211124_prediact_result_MLCE_vote_1.csv > 0.8的样本加入训练集中  模型bert
+37、v17_bert_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_FGM_vote_integrate_vote_alpha_0.6_max_5_20211124.json  0.97343511450 > 0.97289064880 第一名
+
+
+roberta/ernie验证
+把20211124_prediact_result_MLCE_vote_1.csv > 0.8的样本加入训练集中  模型roberta
+38、v18_roberta_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_FGM_vote_integrate_vote_alpha_0.6_max_5_20211124.json  0.97251069029 < 0.97343511450
+感觉可以拿来融合
+39、v19_ernie_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_FGM_vote_integrate_vote_alpha_0.6_max_5_20211124.json 0.97158570119 < 0.97174111212
+感觉有点差不过也可以拿来融合 如果效果不好 可以用bert模型多跑几个不同的随机种子融合
+
+
+双份数据验证——batch内复制
+40、v20_bert_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_double_copy_FGM_vote_integrate_vote_alpha_0.6_max_5_20211124.json  0.97406164175  > 0.97343511450
+batch内复制有效——借助SIMCSE对比学习的思想
+
+
+
+对抗学习 FreeLB对比FGM验证 FGM最佳 0.97343511450
+41、v21_bert_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_FreeLB_vote_integrate_vote_alpha_0.6_max_5_20211125.json  0.97317073171 < 0.97343511450
+无效 FGM > FreeLB
+
+以上全部seed = 1
+
+
+对抗训练SMART验证
+42、
+
+
+
+不同的预训练权重投票融合等——最后提交
+43、
+
+
+
+不同的随机种子
+44、v22_bert_submition_MLCE_L512_rdrop_0_RRL_scheduler_semi_supervised_1_FGM_vote_integrate_vote_alpha_0.6_max_5_doublecopy_20211203_seed5.json   0.97251069029 < 0.97406164175
+无提升
